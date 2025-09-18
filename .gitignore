@@ -31,3 +31,6 @@ Thumbs.db
 *.jar
 *.war
 *.ear
+
+# ignore application-local.properties
+application-local.properties
