@@ -1,5 +1,6 @@
-package com.example.ecommerce.security;
+package com.example.ecommerce.config;
 
+import com.example.ecommerce.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
