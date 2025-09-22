@@ -61,11 +61,7 @@ public class JwtTokenProvider {
     // For generating token with extra claims (like roles, user ID)
     public String generateToken(User userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        //claims.put("userId", userDetails.getId());
-        claims.put("phoneNumber", userDetails.getUsername());
-        //claims.put("firstName", userDetails.getFirstName());
-        //claims.put("lastName", userDetails.getLastName());
-
+        claims.put("phoneNumber", userDetails.getPhoneNumber());
         claims.put("roles",
                 userDetails
                         .getAuthorities()

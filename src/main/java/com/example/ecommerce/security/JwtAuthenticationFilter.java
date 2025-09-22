@@ -40,7 +40,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
 
-        // Get the "Authorization" header from the request.
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String phoneNumber;
@@ -56,7 +55,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (phoneNumber != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(phoneNumber);
-            // Validate the token and user details.
             if (jwtTokenProvider.validateToken(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
