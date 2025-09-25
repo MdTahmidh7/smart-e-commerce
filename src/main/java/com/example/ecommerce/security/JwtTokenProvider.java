@@ -58,7 +58,6 @@ public class JwtTokenProvider {
         return (phoneNumber.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 
-    // For generating token with extra claims (like roles, user ID)
     public String generateToken(User userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("phoneNumber", userDetails.getPhoneNumber());

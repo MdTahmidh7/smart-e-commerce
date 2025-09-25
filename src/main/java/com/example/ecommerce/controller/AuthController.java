@@ -28,10 +28,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String authenticate(
+    public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request
     ) {
         AuthenticationResponse response = authService.authenticate(request);
-        return response.getJwtToken();
+        return ResponseEntity.ok(response);
     }
 }
