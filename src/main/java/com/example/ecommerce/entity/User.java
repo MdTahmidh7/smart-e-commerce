@@ -1,6 +1,6 @@
 package com.example.ecommerce.entity;
 
-import com.example.ecommerce.model.Role;
+import com.example.ecommerce.entity.enumuration.UserType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,11 +35,11 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(255)") // This line is added to fix the error
-    private Role role;
+    private UserType userType;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of(new SimpleGrantedAuthority(userType.name()));
     }
 
     @Override

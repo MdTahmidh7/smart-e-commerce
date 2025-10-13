@@ -14,27 +14,29 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
 public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/products")
-    public Page<Product> getAllProducts(
-            @PageableDefault(page = 0, size = 10) Pageable pageable
-    ) {
+    @GetMapping("/")
+    public Page<Product> getAllProducts(@PageableDefault(page = 0, size = 10) Pageable pageable) {
         return productService.getAllProducts(pageable);
     }
 
-    @GetMapping("/products/{id}")
+    @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
         return productService.getById(id);
     }
 
-    @PostMapping("/products")
+    @PostMapping("/create")
     public ProductDto createProduct(@RequestBody ProductDto productDto) {
         return productService.createProduct(productDto);
     }
 
-
+    @PutMapping("/update")
+    public ProductDto updateProduct(@RequestBody ProductDto productDto) {
+        return null;
+    }
 }

@@ -9,15 +9,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "products")
-public class Product extends AbstractEntity<Long> {
+@Table(name = "inventory")
+public class Inventory extends AbstractEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String productName;
-    private String description;
-    private double price;
-    private int quantity;
-    private String imageUrl;
-
+    private Long productId;
+    private int stockQuantity;
 }

@@ -4,7 +4,7 @@ import com.example.ecommerce.dto.AuthenticationRequest;
 import com.example.ecommerce.dto.AuthenticationResponse;
 import com.example.ecommerce.dto.RegisterRequest;
 import com.example.ecommerce.entity.User;
-import com.example.ecommerce.model.Role;
+import com.example.ecommerce.entity.enumuration.UserType;
 import com.example.ecommerce.repository.UserRepository;
 import com.example.ecommerce.security.JwtTokenProvider;
 import com.example.ecommerce.service.AuthService;
@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
                 .name(request.getName())
                 .phoneNumber(request.getPhoneNumber())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.USER)
+                .userType(UserType.USER)
                 .build();
 
         userRepository.save(user);
