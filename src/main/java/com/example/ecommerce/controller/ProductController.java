@@ -37,6 +37,6 @@ public class ProductController {
 
     @PutMapping("/update")
     public ProductDto updateProduct(@RequestBody ProductDto productDto) {
-        return null;
+        return productService.updateProduct(productDto);
     }
 }
