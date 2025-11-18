@@ -18,5 +18,4 @@ public class Order extends AbstractEntity<Long> {
     private String orderStatus;
     private Long productId;
     private int quantity;
-    private Double totalAmount;
 }
