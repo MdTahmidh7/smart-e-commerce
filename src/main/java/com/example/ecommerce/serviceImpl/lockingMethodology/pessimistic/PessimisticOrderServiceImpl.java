@@ -1,4 +1,4 @@
-package com.example.ecommerce.serviceImpl;
+package com.example.ecommerce.serviceImpl.lockingMethodology.pessimistic;
 
 import com.example.ecommerce.entity.Inventory;
 import com.example.ecommerce.entity.Order;
@@ -7,15 +7,13 @@ import com.example.ecommerce.repository.InventoryRepository;
 import com.example.ecommerce.repository.OrderRepository;
 import com.example.ecommerce.repository.ProductRepository;
 import com.example.ecommerce.service.OrderService;
-import jakarta.persistence.LockModeType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Service("pessimisticOrderService")
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService {
+public class PessimisticOrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final InventoryRepository inventoryRepository;
@@ -24,10 +22,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public Order placeOrder(Long userId, Long productId, int quantity) {
-        productRepository.findById(productId)
+        productRepository
+                .findById(productId)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        Inventory inventory = inventoryRepository.findByProductIdWithLock(productId)
+        Inventory inventory = inventoryRepository
+                .findByProductIdWithLock(productId)
                 .orElseThrow(() -> new RuntimeException("Inventory not found"));
 
         if (inventory.getStockQuantity() < quantity) {

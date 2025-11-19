@@ -3,8 +3,10 @@ package com.example.ecommerce.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Entity
 @AllArgsConstructor
@@ -16,4 +18,7 @@ public class Inventory extends AbstractEntity<Long> {
     private Long id;
     private Long productId;
     private int stockQuantity;
+
+    @Version
+    private Long version;
 }

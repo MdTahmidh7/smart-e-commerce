@@ -5,22 +5,48 @@ import com.example.ecommerce.entity.Order;
 import com.example.ecommerce.entity.Payment;
 import com.example.ecommerce.service.OrderService;
 import com.example.ecommerce.service.PaymentService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/orders")
-@RequiredArgsConstructor
 public class OrderController {
 
-    private final OrderService orderService;
+    private final OrderService optimisticOrderService;
+    private final OrderService pessimisticOrderService;
     private final PaymentService paymentService;
 
+    public OrderController(
+            @Qualifier("optimisticOrderService") OrderService optimisticOrderService,
+            @Qualifier("pessimisticOrderService") OrderService pessimisticOrderService,
+            PaymentService paymentService
+    ) {
+        this.optimisticOrderService = optimisticOrderService;
+        this.pessimisticOrderService = pessimisticOrderService;
+        this.paymentService = paymentService;
+    }
+
     @PostMapping("/place")
-    public ResponseEntity<Payment> createOrder(@RequestBody OrderRequest orderRequest) {
+    public ResponseEntity<Payment> createOrder(
+            @RequestBody OrderRequest orderRequest,
+            @RequestParam(defaultValue = "pessimistic") String locking
+    ) {
         try {
-            Order order = orderService.placeOrder(orderRequest.getUserId(), orderRequest.getProductId(), orderRequest.getQuantity());
+            Order order;
+            if ("optimistic".equalsIgnoreCase(locking)) {
+                order = optimisticOrderService.placeOrder(
+                        orderRequest.getUserId(),
+                        orderRequest.getProductId(),
+                        orderRequest.getQuantity()
+                );
+            } else {
+                order = pessimisticOrderService.placeOrder(
+                        orderRequest.getUserId(),
+                        orderRequest.getProductId(),
+                        orderRequest.getQuantity()
+                );
+            }
             Payment payment = paymentService.generatePaymentUrl(order);
             return ResponseEntity.ok(payment);
         } catch (RuntimeException e) {
