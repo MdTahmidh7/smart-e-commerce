@@ -1,15 +1,31 @@
 package com.example.ecommerce.controller;
 
-import org.springframework.data.domain.jaxb.SpringDataJaxb;
+import com.example.ecommerce.dto.OrderRequest;
+import com.example.ecommerce.entity.Order;
+import com.example.ecommerce.entity.Payment;
+import com.example.ecommerce.service.OrderService;
+import com.example.ecommerce.service.PaymentService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/orders")
+@RequiredArgsConstructor
 public class OrderController {
 
+    private final OrderService orderService;
+    private final PaymentService paymentService;
+
     @PostMapping("/place")
-    public Object createOrder(@RequestBody Object order) {
-        return null;
+    public ResponseEntity<Payment> createOrder(@RequestBody OrderRequest orderRequest) {
+        try {
+            Order order = orderService.placeOrder(orderRequest.getUserId(), orderRequest.getProductId(), orderRequest.getQuantity());
+            Payment payment = paymentService.generatePaymentUrl(order);
+            return ResponseEntity.ok(payment);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @PostMapping("/update")

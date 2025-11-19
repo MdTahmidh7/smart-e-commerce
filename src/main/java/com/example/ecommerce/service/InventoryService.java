@@ -11,6 +11,8 @@ public interface InventoryService {
 
     Inventory getById(Long id);
 
+    Inventory getByProductId(Long productId);
+
     Inventory addNewStocks(Inventory inventory);
 
     Inventory updateStock(Long id, Inventory inventory);

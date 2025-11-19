@@ -5,6 +5,7 @@ import com.example.ecommerce.serviceImpl.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -32,7 +33,9 @@ public class SecurityConfig {
             .csrf(AbstractHttpConfigurer::disable)
             .authorizeHttpRequests(authorize -> authorize
                     .requestMatchers("/api/v1/auth/**", "/logout").permitAll()
-                    .requestMatchers("/products","/products/{id}").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/v1/products", "/api/v1/products/{id}").permitAll()
+                    .requestMatchers("/api/v1/products/create").hasAuthority("ADMIN")
+                    .requestMatchers("/api/v1/products/update").hasAuthority("ADMIN")
                     .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                     .anyRequest().authenticated()
             )

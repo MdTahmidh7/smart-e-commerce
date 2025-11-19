@@ -1,22 +1,24 @@
 package com.example.ecommerce.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.ecommerce.service.PaymentService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/payments")
+@RequiredArgsConstructor
 public class PaymentController {
 
-    @GetMapping("/payment-url")
-    public Object getPaymentUrl(@RequestBody Object order) {
-        return null;
-    }
+    private final PaymentService paymentService;
 
-    @GetMapping("/status")
-    public Object getPaymentStatus(@RequestBody Object payment) {
-        return null;
+    @PostMapping("/process/{orderId}")
+    public ResponseEntity<String> processPayment(@PathVariable Long orderId) {
+        try {
+            paymentService.processPayment(orderId);
+            return ResponseEntity.ok("Payment processed successfully for order " + orderId);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body("Failed to process payment: " + e.getMessage());
+        }
     }
-
 }

@@ -20,7 +20,7 @@ public class ProductController {
 
     private final ProductService productService;
 
-    @GetMapping("/")
+    @GetMapping
     public Page<Product> getAllProducts(@PageableDefault(page = 0, size = 10) Pageable pageable) {
         return productService.getAllProducts(pageable);
     }
