@@ -34,14 +34,21 @@ public class PessimisticOrderServiceImpl implements OrderService {
             throw new RuntimeException("Insufficient stock");
         }
 
-        inventory.setStockQuantity(inventory.getStockQuantity() - quantity);
-        inventoryRepository.save(inventory);
-
+        // Create and persist order first while holding the pessimistic lock.
+        // If persisting the order fails, the inventory won't be changed.
         Order order = new Order();
         order.setUserId(userId);
         order.setProductId(productId);
         order.setQuantity(quantity);
         order.setOrderStatus(OrderStatus.PROCESSING.name());
-        return orderRepository.save(order);
+        Order savedOrder = orderRepository.save(order);
+
+        // Deduct stock and persist inventory. Because the method is @Transactional,
+        // any runtime exception here will roll back both the order and inventory changes.
+        inventory.setStockQuantity(inventory.getStockQuantity() - quantity);
+        inventoryRepository.save(inventory);
+
+        return savedOrder;
+
     }
 }
