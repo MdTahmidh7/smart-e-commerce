@@ -15,7 +15,11 @@ COPY src src
 RUN chmod +x gradlew
 
 # Build the fat JAR with full logs for debugging
-RUN ./gradlew clean bootJar --stacktrace --info --no-daemon
+COPY build.gradle settings.gradle ./
+RUN ./gradlew build -x test --no-daemon
+
+COPY src ./src
+RUN ./gradlew bootJar --no-daemon
 
 # ==============================
 # Run Stage
