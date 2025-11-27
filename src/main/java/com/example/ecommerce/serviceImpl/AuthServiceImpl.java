@@ -24,7 +24,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtService;
     private final AuthenticationManager authenticationManager;
-    private static final String PHONE_NUMBER_REGEX = "^(\\+\\d{1,3}[- ]?)?\\d{10}$";
+    private static final String PHONE_NUMBER_REGEX = "^(?:(?:\\+?880|00880|880)?1\\d{9}|01\\d{9})$";
 
     @Override
     public AuthenticationResponse register(RegisterRequest request) {
@@ -63,9 +63,9 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Phone Number is not valid");
         }
 
-        if(request.getPassword().length() < 6){
-            throw new RuntimeException("Password must be at least 6 characters long");
-        }
+//        if(request.getPassword().length() < 6){
+//            throw new RuntimeException("Password must be at least 6 characters long");
+//        }
 
         User user = userRepository.findByPhoneNumber(request.getPhoneNumber())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
